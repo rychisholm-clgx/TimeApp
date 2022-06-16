@@ -1,0 +1,50 @@
+﻿@{
+    ViewData["Title"] = "Home page";
+}
+
+@*Importing the knockout file stored in the libs folder*@
+<script type="text/javascript" src="/lib/knockout-3.5.1.js"></script>
+<head>
+    <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.css">
+</head>
+<div>
+@*Displays the time*@
+    <h1 id="timeDisplay"></h1>
+
+    @*Button to change the time*@
+    <button class="btn btn-primary" data-bind="click: getTime">Get Time</button>
+</div>
+
+<script>
+     var timeModel = {
+         //Made a variable to store the time
+         time : ko.observable(""),
+
+         /*Get time through the AbortController wiht jQuery ajax call*/
+         getTime : function() {
+            $.ajax({
+                url: "api/time",
+                type: "GET",
+                success: function (data) {
+                    //set the display html to the time string
+                    document.getElementById("timeDisplay").innerHTML = data;
+                },
+                //catch and log errors
+                error: function (request, status, error) {
+                    console.log(request);
+                    console.log(status);
+                    console.log(error);
+                }
+            });
+        
+        }
+    }
+    //apply bindings
+    ko.applyBindings(timeModel);
+
+</script>
+
+<script src="/lib/jquery/dist/jquery.js"></script>
+<script src="/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
+<script src="/lib/bootstrap-daterangepicker/daterangepicker.js"></script>
+<script src="/lib/bootstrap-daterangepicker/moment.min.js"></script>
